@@ -1,3 +1,4 @@
+#List over files and folders for docker to ignore when building images.
 .git
 .gitignore
 __pycache__
