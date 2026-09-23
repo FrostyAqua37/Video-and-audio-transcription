@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Transcriber</title>
+</head>
+<body> 
+    <div class="videoDisplay">
+        <form method=post enctype="multipart/form-data">
+            <input type="file" accept="video/*">
+            <div id="title"></div>
+            <video width="500" controls></video>
+        </form>
+    </div>
+    <hr>
+    <script src="../static/index.js"></script>
+    <h1>Transcribed text with OpenAi Whisper.</h1>
+</body>
+</html>
