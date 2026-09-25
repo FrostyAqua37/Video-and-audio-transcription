@@ -6,15 +6,24 @@
     <title>Media Transcriber</title>
 </head>
 <body> 
-    <div class="videoDisplay">
-        <form method=post enctype="multipart/form-data">
-            <input type="file" accept="video/*">
-            <div id="title"></div>
-            <video width="500" controls></video>
-        </form>
-    </div>
+    <h1>Upload video</h1>
+    <form action="{{ url_for('video') }}" method="post" enctype="multipart/form-data">
+        <input name="video" type="file" accept="video/*">
+        <input type="submit" value="Transcribe video">
+    </form>
+    <!--Gets error messages and displays them if there is any.-->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <h3>{{ message }}</h3>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
     <hr>
-    <script src="../static/index.js"></script>
+    <!-- <script src="../static/index.js"></script> -->
     <h1>Transcribed text with OpenAi Whisper.</h1>
+    {% if value %}
+        <h3>{{ value }}</h3>
+    {% endif %}
 </body>
 </html>
