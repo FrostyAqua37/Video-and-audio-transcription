@@ -1,22 +1,18 @@
-FROM ubuntu/nginx:latest
+FROM python:3.8-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 \
-    python3-pip \
-    python3-venv \
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
     ffmpeg \
+    pip \
     && rm -rf /var/lib/apt/lists/*
 
-COPY . .
+COPY requirements.txt . 
 
-RUN python3 -m venv .venv 
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
-COPY entrypoint.sh /entrypoint.sh
+COPY . . 
 
-RUN chmod +x /entrypoint.sh
-
-ENTRYPOINT ["/entrypoint.sh"]
-
-RUN echo "All dependencies successfully installed."
+CMD ["python3", "flaskr/app.py"]

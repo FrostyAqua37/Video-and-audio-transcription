@@ -1,42 +1,42 @@
-import whisper
-import sys
-from moviepy import *
-import numpy as np
+#import whisper
+from faster_whisper import WhisperModel
+import json
+import re
 
 def get_subtitles(media:str, timestamp:bool=False) -> str | dict[str, str | list]:
-    model = whisper.load_model("large-v3")
-    transcribed_media = model.transcribe(media, fp16=False)
+    model = WhisperModel('large-v2', device='cpu', compute_type='int8')
+    segments, info = model.transcribe(media, beam_size=5)
 
     if timestamp:
-        #Returns transcribed text with timestamp if 'timestamp=True'
-        return transcribed_media['segments']
+        #Returns transcribed text with timestamps
+        return segments
 
     #Returns only transcribed text
-    return transcribed_media['text']
+    return info
 
-def format_timestamp(subtitle:str, font:str="resources/BebasNeue-Regular.ttf", font_size:int=28, color:str='#fff'):
-    #Formats transcribed text to fit video.
-    return TextClip(
-            font=font,
-            text=subtitle,
-            font_size=font_size,
-            color=color,
-            text_align='center'
-            )
+def get_metadata(media:str):
+    ...
 
-#subtitles = get_subtitles(sys.argv[1], timestamp=True)  #Gets video file location from terminal and passes it to function
-#subtitle_list = []
+def subtitles_to_json(subtitles):
+    transcribed_text:list[dict[str, str]] = []
+    pattern = '^[\w.,!?]+$'
 
-"""
-for subtitle in subtitles:
-    #Loops through all the transcribed text and sets start and end duration. 
-    subtitle_list.append(format_timestamp(subtitle=subtitle['text']))   
-    subtitle_list[subtitle['id']].with_start(subtitle['start']).with_end(subtitle['end'])   
-    subtitle_list[subtitle['id']].with_position(('center', 'bottom'))
+    for subtitle in subtitles:
+        if re.search(pattern, subtitle.text) is not None:
+            #Adds a dictionary of id, timestamp of start and end and transcribed text into the list.
+            transcribed_text.append({
+                'id': subtitle.id,
+                'start': f'{subtitle.start:.2f}',
+                'end': f'{subtitle.end:.2f}',
+                'text': subtitle.text
+            })
+        else:
+            #Skips any characters outside the pattern above.
+            continue
 
-media = VideoFileClip('resources/youtube-audio.mp4')
-media.with_start(1).with_end(184.26)
-subtitle_list.insert(0, media)
-video_transcribed = CompositeVideoClip(subtitle_list)
-video_transcribed.preview(fps=20)
-"""
+    #Returns list of dictionaries in JSON format.
+    return json.dumps(transcribed_text)
+
+segments = get_subtitles('resources/files/youtube-audio.mp4', True)
+
+print(subtitles_to_json(segments))

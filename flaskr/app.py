@@ -4,6 +4,7 @@ from transcribe import get_subtitles
 import os
 
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = 'resources/files'
 
 allowed_video_type = {'mp4', 'avi', 'mov', 'wmv', 'ogg', 'webm', 'mkv', 'flv'}
 
@@ -33,8 +34,9 @@ def video():
     if file and valid_filetype(file.filename):
         #Checks if filetype is safe and saves it into resources/files.
         filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return redirect(url_for('index', value=filename))
+        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(path)
+        return redirect(url_for('index'))
     
     return redirect(url_for('index'))
 
