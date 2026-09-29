@@ -1,30 +1,29 @@
-(function mediaPlayer() {
-    var URL = window.URL || window.webkitURL
-    var message = function(title, error) {
-        var element = document.querySelector("#title")
-        element.innerHTML = title
-        element.className = error ? "error" : "info"
-    }
+async function getSubtitles() {
+    try {
+        const response = await fetch('./subtitles.json');
 
-    var displayMedia = function(event) {
-        var file = this.files[0]
-        var type = file.type
-        var videoDisplay = document.querySelector("video")
-        var canPlay = videoDisplay.canPlayType(type)
-
-        if (canPlay == "") canPlay = false
-        var title = file.title
-        var error = canPlay == false
-
-        message(title, error)
-
-        if (error) {
-            return
+        if (!response.ok) {
+            throw new Error(`Error! Status; ${response.status}`);
         }
 
-        var fileURL = URL.createObjectURL(file)
-        videoDisplay.src = fileURL
+        const data = await response.json();
+        
+        console.log(data);
+    } catch (error) {
+        console.log(error);
     }
-    var input = document.querySelector("input")
-    input.addEventListener("change", displayMedia, false)
-})()
+}
+
+/*
+getSubtitles().then(data => {
+    console.log(data);
+
+    const ul = document.createElement('ul');
+
+    data.forEach(subtitle => {
+        const li = document.createElement('li');
+        li.innerHTML = li.text;
+        li.style.fontSize = '22px';
+    }) */
+
+getSubtitles();

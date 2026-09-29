@@ -1,42 +1,52 @@
-#import whisper
 from faster_whisper import WhisperModel
 import json
 import re
 
-def get_subtitles(media:str, timestamp:bool=False) -> str | dict[str, str | list]:
-    model = WhisperModel('large-v2', device='cpu', compute_type='int8')
-    segments, info = model.transcribe(media, beam_size=5)
+class MediaTranscriber:
+    def __init__(self, media:str, type:str, model_type:str='large-v2',):
+        self.media = media  #Filename.
+        self.type = type    #Filetype.
+        self.model = WhisperModel(model_type, device='cpu', compute_type='int8')    #Whisper model object.
+        self.subtitles = '' #Variable to store transcribed subtitles.
+        self.transcribed_text = []  #List to store dictionaries with formatted subtitles.
+        
+    def transcribe(self):
+        #Transcribes media with WhisperModel
+        self.subtitles, _ = self.model.transcribe(self.media, beam_size=5)
 
-    if timestamp:
-        #Returns transcribed text with timestamps
-        return segments
+    def to_json(self):
+        pattern = '^[\\w.,!? ]*$'  #Regex pattern for letters, numbers, whitespace and punctation characters.
+        id = 1
 
-    #Returns only transcribed text
-    return info
+        for subtitle in self.subtitles:
+            subtitle.text = subtitle.text.strip()
 
-def get_metadata(media:str):
-    ...
-
-def subtitles_to_json(subtitles):
-    transcribed_text:list[dict[str, str]] = []
-    pattern = '^[\w.,!?]+$'
-
-    for subtitle in subtitles:
-        if re.search(pattern, subtitle.text) is not None:
-            #Adds a dictionary of id, timestamp of start and end and transcribed text into the list.
-            transcribed_text.append({
-                'id': subtitle.id,
-                'start': f'{subtitle.start:.2f}',
-                'end': f'{subtitle.end:.2f}',
+            if re.search(pattern, subtitle.text) is None:
+                #Skips any characters outside the pattern above.
+                continue
+            
+                #Adds a dictionary of id, timestamp of start and end and transcribed text into the list.
+            self.transcribed_text.append({
+                'id': id,
+                'start': round(subtitle.start, 2),
+                'end': round(subtitle.end, 2),
                 'text': subtitle.text
-            })
-        else:
-            #Skips any characters outside the pattern above.
-            continue
+                })  
+             
+            id += 1 
+            
+    def save(self):
+        with open('resources/files/subtitles.json', 'w') as f:
+            #Converts list of dictionaries into json file.
+            json.dump(self.transcribed_text, f, indent=4)
 
-    #Returns list of dictionaries in JSON format.
-    return json.dumps(transcribed_text)
 
-segments = get_subtitles('resources/files/youtube-audio.mp4', True)
+def main():
+    video_transcriber = MediaTranscriber('resources/files/youtube-audio.mp4', 'video')
+    video_transcriber.transcribe()
+    video_transcriber.to_json()
+    video_transcriber.save()
 
-print(subtitles_to_json(segments))
+if __name__ == '__main__':
+    main()
+
