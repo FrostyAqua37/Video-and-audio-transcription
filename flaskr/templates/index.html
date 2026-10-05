@@ -21,8 +21,21 @@
     {% endwith %}
     <hr>
     <h1>Transcribed text with OpenAi Whisper.</h1>
+
+    <!--Displays video after being transcribed-->
+    {% if filename %}
+        <div class="video">
+            <video width="400" height="500" controls>
+                <source src="{{ url_for('display_video', filename=filename) }}" type="video/*"></source>
+            </video>
+        </div>
+    {% endif %}
+
     <div id="subtitles">
         <!--Transcribed subtitles is displayed here.-->
+        <h2>{% for subtitle in subtitles %}</h2>
+            <p>{{ subtitle['timestamp'] }} {{ subtitle['text'] }}</p> 
+            {% endfor %}
     </div>
 </body>
 <script src="../static/index.js"></script> 

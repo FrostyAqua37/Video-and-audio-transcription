@@ -1,0 +1,158 @@
+[
+    {
+        "id": 1,
+        "start": 41.26,
+        "end": 43.26,
+        "text": "Hold it."
+    },
+    {
+        "id": 2,
+        "start": 46.34,
+        "end": 48.34,
+        "text": "Your sleeve."
+    },
+    {
+        "id": 3,
+        "start": 48.34,
+        "end": 50.34,
+        "text": "Whoa."
+    },
+    {
+        "id": 4,
+        "start": 52.88,
+        "end": 54.88,
+        "text": "Let me out."
+    },
+    {
+        "id": 5,
+        "start": 54.88,
+        "end": 55.88,
+        "text": "Open the airlock."
+    },
+    {
+        "id": 6,
+        "start": 55.88,
+        "end": 56.88,
+        "text": "No."
+    },
+    {
+        "id": 7,
+        "start": 56.88,
+        "end": 57.88,
+        "text": "Open the door!"
+    },
+    {
+        "id": 8,
+        "start": 57.88,
+        "end": 58.88,
+        "text": "Then we have to flash our protocol."
+    },
+    {
+        "id": 9,
+        "start": 58.9,
+        "end": 60.9,
+        "text": "I decide what protocol is."
+    },
+    {
+        "id": 10,
+        "start": 60.9,
+        "end": 61.9,
+        "text": "Open the door!"
+    },
+    {
+        "id": 11,
+        "start": 61.9,
+        "end": 62.9,
+        "text": "Let me out!"
+    },
+    {
+        "id": 12,
+        "start": 62.9,
+        "end": 63.9,
+        "text": "Let me out!"
+    },
+    {
+        "id": 13,
+        "start": 63.9,
+        "end": 64.9,
+        "text": "Reset the drill."
+    },
+    {
+        "id": 14,
+        "start": 64.9,
+        "end": 66.9,
+        "text": "Open it!"
+    },
+    {
+        "id": 15,
+        "start": 66.9,
+        "end": 68.9,
+        "text": "I said reset the drill."
+    },
+    {
+        "id": 16,
+        "start": 68.9,
+        "end": 69.9,
+        "text": "Let me out!"
+    },
+    {
+        "id": 17,
+        "start": 69.9,
+        "end": 70.9,
+        "text": "Let me out!"
+    },
+    {
+        "id": 18,
+        "start": 70.9,
+        "end": 72.9,
+        "text": "Open the door!"
+    },
+    {
+        "id": 19,
+        "start": 72.9,
+        "end": 74.9,
+        "text": "Let me out!"
+    },
+    {
+        "id": 20,
+        "start": 82.92,
+        "end": 84.92,
+        "text": "Sir, the restraints."
+    },
+    {
+        "id": 21,
+        "start": 138.96,
+        "end": 140.96,
+        "text": "Open the door."
+    },
+    {
+        "id": 22,
+        "start": 140.96,
+        "end": 142.96,
+        "text": "Open the door!"
+    },
+    {
+        "id": 23,
+        "start": 142.96,
+        "end": 144.98,
+        "text": "This facility has been sealed."
+    },
+    {
+        "id": 24,
+        "start": 147.98,
+        "end": 149.98,
+        "text": "No one leaves."
+    },
+    {
+        "id": 25,
+        "start": 181.98,
+        "end": 182.98,
+        "text": "Rescue task force!"
+    },
+    {
+        "id": 26,
+        "start": 182.98,
+        "end": 183.98,
+        "text": "A.J.!"
+    }
+]
