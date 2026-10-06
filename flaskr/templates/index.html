@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/css/index.css">
     <title>Media Transcriber</title>
 </head>
 <body> 
     <h1>Upload video</h1>
     <form action="{{ url_for('video') }}" method="post" enctype="multipart/form-data">
         <input name="video" type="file" accept="video/*">
-        <input type="submit" value="Transcribe video">
+        <input type="submit" value="submit">
     </form>
     <!--Gets error messages and displays them if there is any.-->
     {% with messages = get_flashed_messages() %}
@@ -25,7 +26,7 @@
     <!--Displays video after being transcribed-->
     {% if filename %}
         <div class="video">
-            <video width="400" height="500" controls>
+            <video width="500" height="500" controls>
                 <source src="{{ url_for('display_video', filename=filename) }}" type="video/*"></source>
             </video>
         </div>
