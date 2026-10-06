@@ -10,7 +10,7 @@
     <h1>Upload video</h1>
     <form action="{{ url_for('video') }}" method="post" enctype="multipart/form-data">
         <input name="video" type="file" accept="video/*">
-        <input type="submit" value="submit">
+        <input type="submit" value="transcribe">
     </form>
     <!--Gets error messages and displays them if there is any.-->
     {% with messages = get_flashed_messages() %}
@@ -21,13 +21,13 @@
         {% endif %}
     {% endwith %}
     <hr>
-    <h1>Transcribed text with OpenAi Whisper.</h1>
+    <h1>Transcribed text with OpenAI Whisper.</h1>
 
     <!--Displays video after being transcribed-->
     {% if filename %}
         <div class="video">
-            <video width="500" height="500" controls>
-                <source src="{{ url_for('display_video', filename=filename) }}" type="video/*"></source>
+            <video width="500" height="250" controls>
+                <source src="{{ filename }}" type="video/mp4"></source>
             </video>
         </div>
     {% endif %}

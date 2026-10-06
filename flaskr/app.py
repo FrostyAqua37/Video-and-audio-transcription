@@ -40,7 +40,7 @@ def video():
         video_transcriber.transcribe()
         subtitles = video_transcriber.format_subtitles()
         
-        return render_template('index.html', subtitles=subtitles)
+        return render_template('index.html', filename=f'../{path}', subtitles=subtitles)
     
     return redirect(url_for('index'))
 
