@@ -3,40 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/css/index.css">
+    <link rel="stylesheet" href="../static/css/index.css">
     <title>Media Transcriber</title>
 </head>
 <body> 
-    <h1>Upload video</h1>
-    <form action="{{ url_for('video') }}" method="post" enctype="multipart/form-data">
-        <input name="video" type="file" accept="video/*">
-        <input type="submit" value="transcribe">
-    </form>
-    <!--Gets error messages and displays them if there is any.-->
-    {% with messages = get_flashed_messages() %}
-        {% if messages %}
-            {% for message in messages %}
-                <h3>{{ message }}</h3>
-            {% endfor %}
-        {% endif %}
-    {% endwith %}
-    <hr>
-    <h1>Transcribed text with OpenAI Whisper.</h1>
+    <div class="transcribe">
+        <h1>Transcribe media files with OpenAI Whisper</h1>
+            <div class="buttons">
+                <button data-id="video" class="button">Video</button>
+                <button data-id="audio" class="button">Audio</button>
+            </div>
+           
+            <div class="panel" id="video">
+                <form action="{{ url_for('video') }}" method="post" enctype="multipart/form-data">
+                    <input name="video" type="file" accept="video/*">
+                    <input type="submit" value="transcribe">
+                </form>
+                
+                <!--Gets error messages and displays them if there is any.-->
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        {% for message in messages %}
+                            <h3>{{ message }}</h3>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+                <hr>
 
-    <!--Displays video after being transcribed-->
-    {% if filename %}
-        <div class="video">
-            <video width="500" height="250" controls>
-                <source src="{{ filename }}" type="video/mp4"></source>
-            </video>
-        </div>
-    {% endif %}
+                <!--Displays video after being transcribed-->
+                {% if filename %}
+                    <div class="video">
+                        <h1>Transcribed text with OpenAI Whisper.</h1>
+                        <video controls>
+                            <source src="{{ filename }}" type="video/mp4"></source>
+                        </video>
+                    </div>
+                {% endif %}
 
-    <div id="subtitles">
-        <!--Transcribed subtitles is displayed here.-->
-        <h2>{% for subtitle in subtitles %}</h2>
-            <p>{{ subtitle['timestamp'] }} {{ subtitle['text'] }}</p> 
-            {% endfor %}
+                <div id="subtitles">
+                    <!--Transcribed subtitles is displayed here.-->
+                    <h2>{% for subtitle in subtitles %}</h2>
+                        <p>{{ subtitle['timestamp'] }} {{ subtitle['text'] }}</p> 
+                        {% endfor %}
+                </div> 
+            </div>
+
+            <div class="panel" id="audio">This section is for audio files.</div>
     </div>
 </body>
 <script src="../static/index.js"></script> 

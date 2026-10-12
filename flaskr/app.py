@@ -1,16 +1,26 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
-from transcribe import MediaTranscriber
+from flask_restful import Api, Resource
+from resources.transcribe import Transcribe
 import os
 
 app = Flask(__name__)
-app.config['UPLOAD_FOLDER'] = 'static/uploads'
-allowed_video_type = {'mp4', 'avi', 'mov', 'wmv', 'ogg', 'webm', 'mkv', 'flv'}
 
-def valid_filetype(filename:str):
-    #Checks if filetype is valid by splitting the filename into two.  
+app.config['UPLOAD_FOLDER'] = 'static/uploads'
+allowed_video_formats = {'mp4', 'avi', 'mov', 'wmv', 'ogg', 'webm', 'mkv', 'flv'}
+allowed_audio_formats = {'mp3', 'wav', 'flac', 'wma', 'aac', 'aiff', 'ogg', 'midi'}
+
+def valid_filetype(filename:str, type:str):
+    #Checks if filetype is valid by checking file extension at the end. 
+    if type == 'video':
+        allowed_format = allowed_video_formats
+    elif type == 'audio':
+        allowed_format = allowed_audio_formats
+    else:
+        return 'File is required'
+    
     if '.' in filename:
-        return filename.rsplit('.', 1)[1].lower() in allowed_video_type
+        return filename.rsplit('.', 1)[1].lower() in allowed_format
 
 @app.route('/', methods=['GET'])
 def index():
@@ -18,36 +28,26 @@ def index():
     return render_template('index.html')
 
 @app.route('/video', methods=['POST'])
-def video():
-    if 'video' not in request.files:
+def video(filetype:str='video'):
+    if 'video' not in request.files or request.files['video'] == '':
         #Checks if a video is uploaded or not
         flash('No file found')
          
     #Retrieves uploaded file
     file = request.files['video']
-
-    if file.filename == '':
-        #Checks if user uploads a file.
-        flash('No file uploaded')
         
-    if file and valid_filetype(file.filename):
-        #Checks if filetype is safe and saves it into resources/files.
+    if file and valid_filetype(file.filename, filetype):
+        #Checks if filetype is safe and saves it into static/uploads.
         filename = secure_filename(file.filename)
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(path)
 
-        video_transcriber = MediaTranscriber(path, type='video')
-        video_transcriber.transcribe()
-        subtitles = video_transcriber.format_subtitles()
-        
+        trancriber = Transcribe(path, type='video')
+        subtitles = trancriber.transcribed_text
+
         return render_template('index.html', filename=f'../{path}', subtitles=subtitles)
     
     return redirect(url_for('index'))
-
-
-@app.route('/display/<filename>')
-def display_video(filename:str):
-    return redirect(url_for('static', filename='uploads/' + filename)) 
 
 if __name__ == "__main__":
     app.config.from_pyfile('../config.py')

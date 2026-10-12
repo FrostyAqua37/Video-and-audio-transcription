@@ -1,3 +1,30 @@
 body {
-    background-image: url("../../resources/files/background.jpg");
+    font-family: Helvetica;
+    background-color: #C4bAA3;
+    color: white;
+}
+
+.transcribe {
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    margin: 150px 300px 0px;
+    padding-bottom: 200px;
+    border-style: dashed;
+}
+
+div#video.panel {
+    display: block;
+}
+
+div#audio.panel {
+    display: none;
+}
+
+.button {
+    text-transform: uppercase;
+}
+
+.button:hover {
+    cursor: pointer;
 }
