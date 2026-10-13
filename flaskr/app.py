@@ -5,10 +5,16 @@ from resources.transcribe import Transcribe
 import os
 
 app = Flask(__name__)
-
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
+
+model = Transcribe()
 allowed_video_formats = {'mp4', 'avi', 'mov', 'wmv', 'ogg', 'webm', 'mkv', 'flv'}
 allowed_audio_formats = {'mp3', 'wav', 'flac', 'wma', 'aac', 'aiff', 'ogg', 'midi'}
+
+@app.route('/', methods=['GET'])
+def index():
+    #Returns the home page.
+    return render_template('index.html')
 
 def valid_filetype(filename:str, type:str):
     #Checks if filetype is valid by checking file extension at the end. 
@@ -22,14 +28,9 @@ def valid_filetype(filename:str, type:str):
     if '.' in filename:
         return filename.rsplit('.', 1)[1].lower() in allowed_format
 
-@app.route('/', methods=['GET'])
-def index():
-    #Returns the home page.
-    return render_template('index.html')
-
 @app.route('/video', methods=['POST'])
 def video(filetype:str='video'):
-    if 'video' not in request.files or request.files['video'] == '':
+    if 'video' not in request.files:
         #Checks if a video is uploaded or not
         flash('No file found')
          
@@ -42,11 +43,27 @@ def video(filetype:str='video'):
         path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(path)
 
-        trancriber = Transcribe(path, type='video')
-        subtitles = trancriber.transcribed_text
-
-        return render_template('index.html', filename=f'../{path}', subtitles=subtitles)
+        subtitles = model.transcribe(path)
+        return render_template('index.html', video=f'../{path}', video_subtitles=subtitles)
     
+    return redirect(url_for('index'))
+
+@app.route('/audio', methods=['POST'])
+def audio(filetype:str='audio'):
+    if 'audio' not in request.files:
+        #Checks if audio is submitted or not.
+        flash('No audio file found.')
+
+    #Uploaded audio file.
+    file = request.files['audio']
+
+    if file and valid_filetype(file.filename, filetype):
+        filename = secure_filename(file.filename)
+        path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+        subtitles = model.transcribe(path)
+        return render_template('index.html', audio=f'../{path}', audio_subtitles=subtitles)
+
     return redirect(url_for('index'))
 
 if __name__ == "__main__":

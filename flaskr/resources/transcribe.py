@@ -4,17 +4,14 @@ import re
 import time
 
 class Transcribe():
-    def __init__(self, media:str, type:str, model_type:str='large-v2'):
-        self.media = media  #Filename.
-        self.type = type    #Filetype.
+    def __init__(self, model_type:str='large-v2'):
         self.model = WhisperModel(model_type, device='cpu', compute_type='int8')    #Whisper model object.
         self.subtitles = '' #Variable to store transcribed subtitles.
         self.transcribed_text = [] #List with dictionaries to store formatted subtitles.
-        self.run()
 
-    def transcribe(self):
+    def get_subtitles(self, media):
         #Transcribes media with WhisperModel
-        self.subtitles, _ = self.model.transcribe(self.media, beam_size=5)
+        self.subtitles, _ = self.model.transcribe(media, beam_size=5)
 
     def format_subtitles(self):
         pattern = '^[\\w.,!? ]*$'  #Regex pattern for letters, numbers, whitespace and punctation characters.
@@ -44,10 +41,11 @@ class Transcribe():
             return time.strftime('%M:%S', time.gmtime(seconds))
         return time.strftime('%H:%M:%S', time.gmtime(seconds))
 
-    def run(self):
+    def transcribe(self, media):
         #Runs methods necessary to transcribe and format subtitles.
-        self.transcribe()
+        self.get_subtitles(media)
         self.format_subtitles()
+        return self.transcribed_text
 
 def main():
     video_transcriber = Transcribe('resources/files/youtube-audio.mp4', 'video')

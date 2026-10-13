@@ -10,45 +10,75 @@
     <div class="transcribe">
         <h1>Transcribe media files with OpenAI Whisper</h1>
             <div class="buttons">
-                <button data-id="video" class="button">Video</button>
-                <button data-id="audio" class="button">Audio</button>
+                <button data-id="video" id="video-btn">Video</button>
+                <button data-id="audio" id="audio-btn">Audio</button>
             </div>
            
             <div class="panel" id="video">
+                <br>
                 <form action="{{ url_for('video') }}" method="post" enctype="multipart/form-data">
                     <input name="video" type="file" accept="video/*">
                     <input type="submit" value="transcribe">
-                </form>
+                </form><br>
                 
                 <!--Gets error messages and displays them if there is any.-->
-                {% with messages = get_flashed_messages() %}
-                    {% if messages %}
-                        {% for message in messages %}
-                            <h3>{{ message }}</h3>
+                {% with video_errors = get_flashed_messages() %}
+                    {% if video_errors %}
+                        {% for error in video_errors %}
+                            <h3>{{ error }}</h3>
                         {% endfor %}
                     {% endif %}
                 {% endwith %}
-                <hr>
 
                 <!--Displays video after being transcribed-->
-                {% if filename %}
+                {% if video %}
                     <div class="video">
-                        <h1>Transcribed text with OpenAI Whisper.</h1>
+                        <!--<h1>Transcribed text with OpenAI Whisper.</h1> -->
                         <video controls>
-                            <source src="{{ filename }}" type="video/mp4"></source>
+                            <source src="{{ video }}" type="video/mp4"></source>
                         </video>
                     </div>
                 {% endif %}
 
-                <div id="subtitles">
+                <div id="video-subtitles">
                     <!--Transcribed subtitles is displayed here.-->
-                    <h2>{% for subtitle in subtitles %}</h2>
+                    <h2>{% for subtitle in video_subtitles %}</h2>
                         <p>{{ subtitle['timestamp'] }} {{ subtitle['text'] }}</p> 
                         {% endfor %}
                 </div> 
             </div>
 
-            <div class="panel" id="audio">This section is for audio files.</div>
+            <div class="panel" id="audio">
+                <br>
+                <form action="{{ url_for('audio') }}" method="post" enctype="multipart/form-data">
+                    <input name="audio" type="file" accept="audio/*">
+                    <input type="submit" value="transcribe">
+                </form><br>
+
+                <!--Gets error messages and displays them if there is any.-->
+                {% with audio_errors = get_flashed_messages() %}
+                    {% if audio_errors %}
+                        {% for error in audio_errors %}
+                            <h3>{{ error }}</h3>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% if audio %}
+                    <div class="audio">
+                        <audio controls>
+                            <source src="{{ audio }}" type="audio/*"></source>
+                        </audio>
+                    </div>
+                {% endif %}
+
+                <div class="audio-subtitles">
+                    <h2>{% for subtitle in audio_subtitles %}</h2>
+                        <p>{{ subtitle['timestamp'] }} {{ subtitle['text'] }}</p>
+                        {% endfor %}
+
+                </div>
+            </div>
     </div>
 </body>
 <script src="../static/index.js"></script> 

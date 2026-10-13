@@ -9,7 +9,7 @@ body {
     justify-items: center;
     align-items: center;
     margin: 150px 300px 0px;
-    padding-bottom: 200px;
+    padding-bottom: 75px;
     border-style: dashed;
 }
 
@@ -21,10 +21,36 @@ div#audio.panel {
     display: none;
 }
 
-.button {
+button {
+    /*Button styling*/
     text-transform: uppercase;
+    background-color: transparent;
+    color: white;
+    font-size: 20px;
+    border: 1px solid white;
+    padding: 10px 100px;
+    margin-left: 0px;
+    margin-right: 0px;
+    float: left;
 }
 
-.button:hover {
+button:hover {
+    /*Change button and pointer when hovering over button*/
     cursor: pointer;
+    scale: 1.20;
+    color: #C4bAA3;
+    background-color: white; 
+}
+
+#video-btn {
+    background-color: white;
+    color: #C4bAA3;
+}
+
+video {
+    /*Video styling*/
+    width: auto;
+    height: auto;
+    border: 2px solid black;
+    border-radius: 5px;
 }
