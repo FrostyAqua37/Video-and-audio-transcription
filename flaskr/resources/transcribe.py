@@ -6,7 +6,7 @@ import time
 class Transcribe():
     def __init__(self, model_type:str='large-v2'):
         self.model = WhisperModel(model_type, device='cpu', compute_type='int8')    #Whisper model object.
-        self.subtitles = '' #Variable to store transcribed subtitles.
+        self.subtitles = '' 
         self.transcribed_text = [] #List with dictionaries to store formatted subtitles.
 
     def get_subtitles(self, media):
@@ -25,18 +25,17 @@ class Transcribe():
                 continue
 
             start = self.format_timestamp(subtitle.start)
-            end = self.format_timestamp(subtitle.end)
                     
             #Adds a dictionary of id, timestamp of start and end and transcribed text into the list.
             self.transcribed_text.append({
                 'id': id,
-                'timestamp': f'[{start} — {end}]', #Combines start and end time of current subtitle into one
+                'timestamp': f'[{start}]',
                 'text': subtitle.text
             })
             id += 1    
 
     def format_timestamp(self, seconds:int) -> str:
-        #Formats seconds into HH:MM:SS or MM:SS if total seconds is less than an hour.
+        #Formats seconds into HH:MM:SS or MM:SS if longer than 1 hour.
         if seconds < 3600:
             return time.strftime('%M:%S', time.gmtime(seconds))
         return time.strftime('%H:%M:%S', time.gmtime(seconds))
