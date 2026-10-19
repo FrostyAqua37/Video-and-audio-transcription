@@ -1,9 +1,8 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 from resources.transcribe import Transcribe
-from uuid import uuid4
+from shortuuid import uuid
 from pathlib import Path
-import os
 
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = 'static/uploads'
@@ -47,7 +46,7 @@ def process_upload(filetype:str):
     upload_dir = Path(app.config['UPLOAD_FOLDER'])
     upload_dir.mkdir(parents=True, exist_ok=True)    #Makes a new directory within upload folder path
 
-    filename = f'{uuid4().hex}_{secure_file}'   #Generates random string of characters to prevent different uploads to overwrite each other.
+    filename = f'{uuid()[:10]}_{secure_file}'   #Generates random string of characters to prevent different uploads to overwrite each other.
     file_path = upload_dir / filename
 
     try:

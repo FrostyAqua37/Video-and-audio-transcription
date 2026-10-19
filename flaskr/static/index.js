@@ -35,7 +35,6 @@ function hideSection(id) {
 }
 
 function activeButton(id) {
-    //Change color and background of current active button.
     document.getElementById(id).style.color = '#C4bAA3';
     document.getElementById(id).style.backgroundColor = 'white';
 }
@@ -44,3 +43,13 @@ function unactiveButton(id) {
     document.getElementById(id).style.color = 'white';
     document.getElementById(id).style.backgroundColor = '#C4bAA3';
 }
+
+//Gets the name of uploaded file and displays it.
+const upload = document.getElementById('upload');
+const filepath = document.getElementById('filepath');
+
+upload.addEventListener('change', function() {
+    if (upload.files.length > 0) {
+        filepath.textContent = upload.files[0].name;
+    }
+});

@@ -8,18 +8,27 @@
 </head>
 <body> 
     <div class="transcribe">
-        <h1>Transcribe media files with OpenAI Whisper</h1>
+        <h1>Transcribe media with OpenAI Whisper</h1>
             <div class="buttons">
                 <button data-id="video" id="video-btn">Video</button>
                 <button data-id="audio" id="audio-btn">Audio</button>
             </div>
            
             <div class="panel" id="video">
-                <br>
                 <form action="{{ url_for('video') }}" method="post" enctype="multipart/form-data">
-                    <input name="video" type="file" accept="video/*">
-                    <input type="submit" value="transcribe">
-                </form><br>
+                    <div class="upload-row">
+                        <label class="upload">
+                            Upload
+                            <input id="upload" name="video" type="file" accept="video/*", onclick="displayFilePath()">
+                        </label>
+                        <p id="filepath"></p>
+
+                        <label class="submit">
+                            <input id="submit" type="submit" value="transcribe">
+                            Transcribe
+                        </label>
+                    </div>
+                </form>
                 
                 <!--Gets error messages and displays them if there is any.-->
                 {% with video_errors = get_flashed_messages() %}
@@ -34,27 +43,27 @@
                 {% if video %}
                     <div class="video">
                         <!--<h1>Transcribed text with OpenAI Whisper.</h1> -->
-                        <video controls>
+                        <video class="video-display" controls>
                             <source src="{{ video }}" type="video/mp4"></source>
                         </video>
                     </div>
 
                 <div id="download-video">
-                    <!--Download buttons will be displayed here.-->
-                    <h2>Successfully transcribed video file</h2>
-                    <button id="mp4-btn">Download as MP4 file (mp4)</button>
-                    <button id="txt-btn">Download as text file (txt)</button>
-                    <button id="pdf-btn">Download as pdf file (pdf)</button>
+                    <!--Download options will be displayed here.-->
+                    <h2>Download video file</h2>
+                    <a href="" download>download as MP4 file</a>
+                    <a href="" download>download as text file</a>
+                    <a href="" download>download as PDF file</a>
                 </div> 
                 {% endif %}
             </div>
 
             <div class="panel" id="audio">
-                <br>
+                
                 <form action="{{ url_for('audio') }}" method="post" enctype="multipart/form-data">
                     <input name="audio" type="file" accept="audio/*">
                     <input type="submit" value="transcribe">
-                </form><br>
+                </form>
 
                 <!--Gets error messages and displays them if there is any.-->
                 {% with audio_errors = get_flashed_messages() %}

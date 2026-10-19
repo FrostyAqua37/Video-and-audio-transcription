@@ -10,7 +10,6 @@ body {
     align-items: center;
     margin: 150px 300px 0px;
     padding-bottom: 75px;
-    border-style: dashed;
 }
 
 div#video.panel {
@@ -32,12 +31,13 @@ button {
     margin-left: 0px;
     margin-right: 0px;
     float: left;
+    margin-bottom: 30px;
 }
 
 button:hover {
     /*Change button and pointer when hovering over button*/
     cursor: pointer;
-    scale: 1.20;
+    scale: 1.05;
     color: #C4bAA3;
     background-color: white; 
 }
@@ -47,10 +47,92 @@ button:hover {
     color: #C4bAA3;
 }
 
+form {
+    width: 550px;
+    vertical-align: middle;
+    margin-bottom: 30px;
+}
+
+input[type=file], input[type=submit] {
+    display: none;
+}
+
+.upload-row {
+    display: flex;
+    align-items: center;
+}
+
+.upload, .submit {
+    border: 1px solid white;
+    text-transform: uppercase;
+    float: left;
+    display: flex;
+    align-items: center;
+    height: 40px;
+    padding: 5px 15px;
+}
+
+#filepath {
+   padding: 5px 15px;
+   border-top: 1px solid white;
+   border-bottom: 1px solid white;
+   width: 100%;
+   float: left;
+   height: 40px;
+   color: white;
+   display: flex;
+   align-items: center;
+}
+
+.upload:hover, .submit:hover {
+    background-color: white;
+    color: #C4bAA3;
+    cursor: pointer;
+    scale: 1.05;
+}
+
+.submit {
+    background-color: white;
+    color: #C4bAA3;    
+}
+
 video {
-    /*Video styling*/
+    /*Video div styling*/
+    width: 700px;
+    height: 400px;
+    border-radius: 10px;
+    margin-bottom: 60px;
+}
+
+.video-display {
+    /*Video source styling*/
     width: auto;
     height: auto;
-    border: 2px solid black;
-    border-radius: 5px;
+    background-size: cover;
+    overflow: hidden;
+}
+
+h1, h2 {
+    text-transform: uppercase;
+}
+
+a, a:not(:last-of-type) {
+    display: block;
+    text-align: center;
+    text-transform: uppercase;
+    background-color: transparent;
+    color: white;
+    font-size: 20px;
+    border: 1px solid white;
+    padding: 10px 100px;
+    margin-left: 0px;
+    margin-right: 0px;
+    text-decoration: none;
+    border-style: dashed;
+    margin-bottom: 10px;
+}
+
+a:hover {
+    color: #C4bAA3;
+    background-color: white;
 }
