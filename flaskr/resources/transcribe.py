@@ -29,7 +29,7 @@ class Transcribe():
             #Adds a dictionary of id, timestamp of start and end and transcribed text into the list.
             self.transcribed_text.append({
                 'id': id,
-                'timestamp': f'[{start}]',
+                'timestamp': start,
                 'text': subtitle.text
             })
             id += 1    

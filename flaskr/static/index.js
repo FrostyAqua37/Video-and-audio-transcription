@@ -27,7 +27,7 @@ function displaySection(e) {
 }
 
 function showSection(id) {
-    document.getElementById(id).style.display = 'block';
+    document.getElementById(id).style.display = 'flex';
 }
 
 function hideSection(id) {
@@ -46,7 +46,7 @@ function unactiveButton(id) {
 
 //Gets the name of uploaded file and displays it.
 const upload = document.getElementById('upload');
-const filepath = document.getElementById('filepath');
+const filepath = document.getElementById('filename');
 
 upload.addEventListener('change', function() {
     if (upload.files.length > 0) {

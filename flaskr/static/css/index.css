@@ -50,7 +50,7 @@ button:hover {
 form {
     width: 550px;
     vertical-align: middle;
-    margin-bottom: 30px;
+    margin-bottom: 30px;  
 }
 
 input[type=file], input[type=submit] {
@@ -65,19 +65,17 @@ input[type=file], input[type=submit] {
 .upload, .submit {
     border: 1px solid white;
     text-transform: uppercase;
-    float: left;
     display: flex;
     align-items: center;
     height: 40px;
     padding: 5px 15px;
 }
 
-#filepath {
+#filename {
    padding: 5px 15px;
    border-top: 1px solid white;
    border-bottom: 1px solid white;
    width: 100%;
-   float: left;
    height: 40px;
    color: white;
    display: flex;
@@ -93,13 +91,13 @@ input[type=file], input[type=submit] {
 
 .submit {
     background-color: white;
-    color: #C4bAA3;    
+    color: #C4bAA3;
 }
 
 video {
     /*Video div styling*/
     width: 700px;
-    height: 400px;
+    height: 500px;
     border-radius: 10px;
     margin-bottom: 60px;
 }

@@ -21,7 +21,7 @@
                             Upload
                             <input id="upload" name="video" type="file" accept="video/*", onclick="displayFilePath()">
                         </label>
-                        <p id="filepath"></p>
+                        <p id="filename"></p>
 
                         <label class="submit">
                             <input id="submit" type="submit" value="transcribe">
@@ -51,9 +51,9 @@
                 <div id="download-video">
                     <!--Download options will be displayed here.-->
                     <h2>Download video file</h2>
-                    <a href="" download>download as MP4 file</a>
-                    <a href="" download>download as text file</a>
-                    <a href="" download>download as PDF file</a>
+                    <a href="{{ video }}" download>download as MP4 file</a>
+                    <a href="{{ text_file }}" download>download as text file</a>
+                    <a href="{{ pdf }}" download>download as PDF file</a>
                 </div> 
                 {% endif %}
             </div>

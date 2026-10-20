@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, flash, redirect, url_for
 from werkzeug.utils import secure_filename
 from resources.transcribe import Transcribe
+from reportlab.pdfgen import canvas
+from reportlab.lib import colors
 from shortuuid import uuid
 from pathlib import Path
 
@@ -53,6 +55,11 @@ def process_upload(filetype:str):
         #Saves and transcribes media file.
         media_file.save(file_path)
         subtitles = model.transcribe(str(file_path))
+        file_name = media_file.filename.lower().split('.')[0]   #Filename without extension
+
+        #Exports video file transcriptions as text file and pdf.
+        text_file = save_as_text(file_name, 'txt', subtitles)
+        pdf= save_as_pdf(file_name, subtitles)
 
     except Exception:
         app.logger.exception(f'Failed to process {filetype} file.')
@@ -67,6 +74,8 @@ def process_upload(filetype:str):
         'index.html',
         **{
             filetype: url_for('static', filename=f'uploads/{filename}'),
+            'text_file': text_file,
+            'pdf': pdf,
         },
     )
 
@@ -83,9 +92,43 @@ def video():
 def audio():
     return process_upload('audio')
 
-def save(filename:str, filetype:str):
-    #Saves transcribed files in Download folder.
-    pass
+def save_as_text(filename:str, filetype:str, subtitles:list):
+    path = Path(app.config['UPLOAD_FOLDER'])
+    text_file = open(f'{path}/{filename}.{filetype}', 'w')
+
+    for subtitle in subtitles:
+        text_file.write(f'[{subtitle["timestamp"]}] {subtitle["text"]}')
+        text_file.write('\n')
+
+    text_file.close()
+    return text_file.name
+
+def save_as_pdf(filename:str, subtitles:list):
+    #Saving subtitles in a pdf document
+    save_dir = f'{app.config["UPLOAD_FOLDER"]}/{filename}.pdf'
+    subtitle = 'This text transcription was done through OpenAI Whisper.'  
+
+    pdf = canvas.Canvas(save_dir)  
+    pdf.setTitle(filename)
+    pdf.setFont('Courier', 32)
+
+    #Sets title and subtitle at x, y position
+    pdf.drawCentredString(300, 770, filename)  
+    pdf.setFont('Courier', 16)
+    pdf.drawCentredString(290, 720, subtitle)
+
+    pdf.line(30, 710, 550, 710)
+
+    text = pdf.beginText(40, 680)
+    text.setFont('Courier', 16)
+
+    for subtitle in subtitles:
+        line = f'{subtitle["timestamp"]}  {subtitle["text"]}'
+        text.textLine(line)
+
+    pdf.drawText(text)
+    pdf.save()
+    return pdf
 
 if __name__ == "__main__":
     app.run(debug=True)
