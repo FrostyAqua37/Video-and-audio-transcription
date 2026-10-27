@@ -2,94 +2,103 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../static/css/index.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Upload audio or video files for transcription.">
     <title>Media Transcriber</title>
+    <link rel="stylesheet" href="../static/css/index.css">
+    <script src="../static/index.js" defer></script>
 </head>
-<body> 
-    <div class="transcribe">
-        <h1>Transcribe media with OpenAI Whisper</h1>
-            <div class="buttons">
-                <button data-id="video" id="video-btn">Video</button>
-                <button data-id="audio" id="audio-btn">Audio</button>
-            </div>
-           
-            <div class="panel" id="video">
-                <form action="{{ url_for('video') }}" method="post" enctype="multipart/form-data">
-                    <div class="upload-row">
-                        <label class="upload">
-                            Upload
-                            <input id="upload" name="video" type="file" accept="video/*", onclick="displayFilePath()">
-                        </label>
-                        <p id="filename"></p>
+<body>
+    <main class="transcribe">
+        <header class="page-header">
+            <p class="eyebrow">AI-powered transcription</p>
+            <h1>Media Transcriber</h1>
+            <p class="intro">Turn your audio and video into downloadable transcripts.</p>
+        </header>
 
-                        <label class="submit">
-                            <input id="submit" type="submit" value="transcribe">
-                            Transcribe
-                        </label>
-                    </div>
-                </form>
-                
-                <!--Gets error messages and displays them if there is any.-->
-                {% with video_errors = get_flashed_messages() %}
-                    {% if video_errors %}
-                        {% for error in video_errors %}
-                            <h3>{{ error }}</h3>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
+        <div class="tabs" role="tablist" aria-label="Choose media type">
+            <button class="tab is-active" type="button" id="video-btn"
+                    data-target="video" role="tab" aria-controls="video"
+                    aria-selected="true">Video</button>
+            <button class="tab" type="button" id="audio-btn"
+                    data-target="audio" role="tab" aria-controls="audio"
+                    aria-selected="false">Audio</button>
+        </div>
 
-                <!--Displays video after being transcribed-->
-                {% if video %}
-                    <div class="video">
-                        <!--<h1>Transcribed text with OpenAI Whisper.</h1> -->
-                        <video class="video-display" controls>
-                            <source src="{{ video }}" type="video/mp4"></source>
-                        </video>
-                    </div>
-
-                <div id="download-video">
-                    <!--Download options will be displayed here.-->
-                    <h2>Download video file</h2>
-                    <a href="{{ video }}" download>download as MP4 file</a>
-                    <a href="{{ text_file }}" download>download as text file</a>
-                    <a href="{{ pdf }}" download>download as PDF file</a>
-                </div> 
-                {% endif %}
-            </div>
-
-            <div class="panel" id="audio">
-                
-                <form action="{{ url_for('audio') }}" method="post" enctype="multipart/form-data">
-                    <input name="audio" type="file" accept="audio/*">
-                    <input type="submit" value="transcribe">
-                </form>
-
-                <!--Gets error messages and displays them if there is any.-->
-                {% with audio_errors = get_flashed_messages() %}
-                    {% if audio_errors %}
-                        {% for error in audio_errors %}
-                            <h3>{{ error }}</h3>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-
-                {% if audio %}
-                    <div class="audio">
-                        <audio controls>
-                            <source src="{{ audio }}" type="audio/*"></source>
-                        </audio>
-                    </div>
-                {% endif %}
-
-                <div class="audio-subtitles">
-                    <h2>{% for subtitle in audio_subtitles %}</h2>
-                        <p>{{ subtitle['timestamp'] }} {{ subtitle['text'] }}</p>
-                        {% endfor %}
-
+        <section class="panel" id="video" role="tabpanel" aria-labelledby="video-btn">
+            <form action="{{ url_for('video') }}" method="post" enctype="multipart/form-data">
+                <label class="field-label" for="video-upload">Choose a video file</label>
+                <div class="upload-row">
+                    <label class="control-button upload-button" for="video-upload">Choose file</label>
+                    <input class="file-input" id="video-upload" name="video" type="file"
+                           accept="video/*">
+                    <span class="filename" id="video-filename" aria-live="polite">No file selected</span>
+                    <button class="control-button submit-button" type="submit">Transcribe</button>
                 </div>
-            </div>
-    </div>
+            </form>
+
+            {% with video_errors = get_flashed_messages() %}
+                {% if video_errors %}
+                    <div class="messages" role="alert">
+                        {% for error in video_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% if video %}
+                <div class="media-result">
+                    <h2>Preview</h2>
+                    <video class="video-display" controls preload="metadata">
+                        <source src="{{ video }}">
+                        Your browser does not support video playback.
+                    </video>
+                    <h2>Download your files</h2>
+                    <div class="download-list">
+                        <a href="{{ video }}" download>Download video (MP4)</a>
+                        <a href="{{ text_file }}" download>Download transcript (TXT)</a>
+                        <!--<a href="{{ pdf }}" download>Download transcript (PDF)</a>-->
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+
+        <section class="panel" id="audio" role="tabpanel" aria-labelledby="audio-btn" hidden>
+            <form action="{{ url_for('audio') }}" method="post" enctype="multipart/form-data">
+                <label class="field-label" for="audio-upload">Choose an audio file</label>
+                <div class="upload-row">
+                    <label class="control-button upload-button" for="audio-upload">Choose file</label>
+                    <input class="file-input" id="audio-upload" name="audio" type="file"
+                           accept="audio/*">
+                    <span class="filename" id="audio-filename" aria-live="polite">No file selected</span>
+                    <button class="control-button submit-button" type="submit">Transcribe</button>
+                </div>
+            </form>
+
+            {% with audio_errors = get_flashed_messages(category_filter=["audio"]) %}
+                {% if audio_errors %}
+                    <div class="messages" role="alert">
+                        {% for error in audio_errors %}<p>{{ error }}</p>{% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% if audio %}
+                <div class="media-result">
+                    <h2>Preview</h2>
+                    <audio class="audio-display" controls preload="metadata">
+                        <source src="{{ audio }}">
+                        Your browser does not support audio playback.
+                    </audio>
+                    <h2>Download your files</h2>
+                    <div class="download-list">
+                        <a href="{{ text_file }}" download>Download transcript (TXT)</a>
+                        <a href="{{ pdf }}" download>Download transcript (PDF)</a>
+                    </div>
+                </div>
+            {% endif %}
+        </section>
+    </main>
 </body>
-<script src="../static/index.js"></script> 
 </html>
