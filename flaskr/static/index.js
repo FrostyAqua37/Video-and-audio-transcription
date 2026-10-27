@@ -8,6 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
         buttons.forEach((button) => {
             const is_active = button.dataset.target === target_id;
             button.classList.toggle('is-active', is_active);
+
             button.setAttribute('aria-selected', String(is_active));
             button.tabIndex = is_active ? 0 : -1;
 
@@ -68,3 +69,10 @@ document.addEventListener("DOMContentLoaded", () => {
         activateButton('video');
     }
 });
+
+//Display loading animation
+function loading() {
+    $('#container').css('display', 'flex');
+    /* $('#loader').removeProperty('display');
+    $('#loader-text').removeProperty('display'); */
+}

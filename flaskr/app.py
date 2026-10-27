@@ -59,7 +59,6 @@ def process_upload(filetype:str):
 
         #Exports video file transcriptions as text file and pdf.
         text_file = save_as_text(file_name, 'txt', subtitles)
-        #save_as_pdf(file_name, subtitles)
 
     except Exception:
         app.logger.exception(f'Failed to process {filetype} file.')
@@ -75,7 +74,6 @@ def process_upload(filetype:str):
         **{
             filetype: url_for('static', filename=f'uploads/{filename}'),
             'text_file': text_file,
-            #'pdf': upload_dir / f'{file_name}.pdf',
         },
     )
 
@@ -102,31 +100,6 @@ def save_as_text(filename:str, filetype:str, subtitles:list):
 
     text_file.close()
     return text_file.name
-
-def save_as_pdf(filename:str, subtitles:list):
-    #Saving subtitles in a pdf document
-    save_dir = f'{app.config["UPLOAD_FOLDER"]}/{filename}.pdf'
-    subtitle = '*This transcription was done through OpenAI Whisper.'  
-
-    pdf = canvas.Canvas(save_dir)  
-    pdf.setTitle(filename)
-    pdf.setFont('Courier', 20)
-
-    #Sets title and subtitle at x, y position
-    pdf.drawCentredString(300, 770, filename.capitalize())  
-    pdf.setFont('Courier', 18)
-    pdf.drawCentredString(290, 720, subtitle)
-
-    pdf.line(30, 690, 550, 690)
-    text = pdf.beginText(40, 650)
-    pdf.setFont('Courier', 14)
-
-    for subtitle in subtitles:
-        line = f'[{subtitle["timestamp"]}] {subtitle["text"]}'
-        text.textLine(line)
-
-    pdf.drawText(text)
-    pdf.save()
 
 if __name__ == "__main__":
     app.run(debug=True)

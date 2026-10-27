@@ -118,6 +118,40 @@ form { margin: 0 0 30px; }
 .submit-button { color: var(--text-dark); background: var(--text);}
 .submit-button:hover { background: #f0eadf; }
 
+#container {
+    position: relative;
+    display: none;
+    flex-flow: column wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+#loader {
+    /* Loading icon */
+    left: 50%;
+    top: 50%;
+    width: 120px;
+    height: 120px;
+    margin-bottom: 20px;
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid var(--background);
+    animation: spin 2s linear infinite;
+}
+
+.loader:after {
+    position: absolute;
+    bottom: 100%;
+}
+
+#loader-text { text-align: center; }
+ 
+/* Loader spinning animation */
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
 .filename {
     display: flex;
     min-width: 0;

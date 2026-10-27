@@ -6,7 +6,9 @@
     <meta name="description" content="Upload audio or video files for transcription.">
     <title>Media Transcriber</title>
     <link rel="stylesheet" href="../static/css/index.css">
-    <script src="../static/index.js" defer></script>
+    <script src="../static/index.js" type="text/javascript" defer></script>
+    <!-- jquery import -->
+    <script src="https://code.jquery.com/jquery-4.0.0.js" integrity="sha256-9fsHeVnKBvqh3FB2HYu7g2xseAZ5MlN6Kz/qnkASV8U=" crossorigin="anonymous"></script>
 </head>
 <body>
     <main class="transcribe">
@@ -33,10 +35,10 @@
                     <input class="file-input" id="video-upload" name="video" type="file"
                            accept="video/*">
                     <span class="filename" id="video-filename" aria-live="polite">No file selected</span>
-                    <button class="control-button submit-button" type="submit">Transcribe</button>
+                    <button class="control-button submit-button" id="submit" type="submit" onclick="loading()">Transcribe</button>
                 </div>
             </form>
-
+        
             {% with video_errors = get_flashed_messages() %}
                 {% if video_errors %}
                     <div class="messages" role="alert">
@@ -46,6 +48,11 @@
                     </div>
                 {% endif %}
             {% endwith %}
+
+            <div id="container">
+                <div class="loader" id="loader"></div>
+                <div id="loader-text">Transcribing video file.<br>This may take a few minutes...</div>
+            </div>
 
             {% if video %}
                 <div class="media-result">
@@ -72,7 +79,7 @@
                     <input class="file-input" id="audio-upload" name="audio" type="file"
                            accept="audio/*">
                     <span class="filename" id="audio-filename" aria-live="polite">No file selected</span>
-                    <button class="control-button submit-button" type="submit">Transcribe</button>
+                    <button class="control-button submit-button" id="submit" type="submit">Transcribe</button>
                 </div>
             </form>
 
@@ -83,6 +90,11 @@
                     </div>
                 {% endif %}
             {% endwith %}
+
+            <div id="container">
+                <div class="loader" id="loader"></div>
+                <div id="loader-text">Transcribing video file.<br>This may take a few minutes...</div>
+            </div>
 
             {% if audio %}
                 <div class="media-result">
